@@ -20,10 +20,13 @@ class MapMemoryCore {
     rclcpp::Logger logger_;
     double last_x_ {};
     double last_y_ {};
-    double distance_threshold_ {1.5};
-    nav_msgs::msg::OccupancyGrid global_map_;
+    double distance_threshold_ {1.5};          // distance (m) before resetting position check
+    nav_msgs::msg::OccupancyGrid global_map_; 
 
-    bool first_run_ = true;
+    /* true until first merge so that mergeCostmap() copies the whole map instead of 
+    merging into it the first run */
+    bool first_run_ = true; 
+                      
     bool costmap_updated_ = false;
     nav_msgs::msg::OccupancyGrid current_map_;
     

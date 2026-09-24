@@ -7,6 +7,7 @@ MapMemoryNode::MapMemoryNode() : Node("map_memory"), map_memory_(robot::MapMemor
   timer_ = this->create_wall_timer(std::chrono::seconds(1), std::bind(&MapMemoryNode::timerCallback, this));
 }
 void MapMemoryNode::costmapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg) {
+  // dereference the shared pointer since storingCostmap expects an actual message, not a pointer
   map_memory_.storingCostmap(*msg);
 }
 
@@ -16,6 +17,7 @@ void MapMemoryNode::odometryCallback(const nav_msgs::msg::Odometry::SharedPtr ms
 }
 
 void MapMemoryNode::timerCallback() {
+   // get the merged map, timestamp it, and publish it on /map for the planner node.
   nav_msgs::msg::OccupancyGrid msg {map_memory_.mergeCostmap()};
     msg.header.stamp = this->get_clock()->now();
     msg.header.frame_id = "map";
