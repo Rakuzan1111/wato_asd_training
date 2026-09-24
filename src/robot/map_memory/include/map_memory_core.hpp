@@ -15,6 +15,7 @@ class MapMemoryCore {
     void storingCostmap(nav_msgs::msg::OccupancyGrid msg);
     void odometryCheck(double current_x, double current_y);
     nav_msgs::msg::OccupancyGrid mergeCostmap();
+    bool hasReceivedCostmap(); // returns whether a real costmap has ever been received yet
 
   private:
     rclcpp::Logger logger_;

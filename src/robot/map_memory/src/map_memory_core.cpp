@@ -5,6 +5,12 @@ namespace robot
 MapMemoryCore::MapMemoryCore(const rclcpp::Logger& logger) 
   : logger_(logger) {}
 
+/* tells the caller whether storingCostmap() has run at least once, so
+   mergeCostmap() isn't called on an empty, uninitialized current_map_ */
+bool MapMemoryCore::hasReceivedCostmap() {
+  return costmap_updated_;
+}
+
 // save the latest costmap and flag that new data arrived
 void MapMemoryCore::storingCostmap(nav_msgs::msg::OccupancyGrid msg) {
   costmap_updated_ = true;

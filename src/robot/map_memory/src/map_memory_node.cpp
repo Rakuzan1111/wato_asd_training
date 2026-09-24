@@ -17,6 +17,12 @@ void MapMemoryNode::odometryCallback(const nav_msgs::msg::Odometry::SharedPtr ms
 }
 
 void MapMemoryNode::timerCallback() {
+  /* skip this cycle if no costmap has arrived yet — otherwise mergeCostmap()
+     runs on an empty current_map_ before its size matches global_map_,
+     which was causing a segfault on startup */
+  if (!map_memory_.hasReceivedCostmap()) {
+    return;  // nothing to merge yet, skip this cycle
+  }
    // get the merged map, timestamp it, and publish it on /map for the planner node.
   nav_msgs::msg::OccupancyGrid msg {map_memory_.mergeCostmap()};
     msg.header.stamp = this->get_clock()->now();
