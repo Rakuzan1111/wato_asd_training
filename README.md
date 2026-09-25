@@ -3,7 +3,10 @@
 
 Runzhen Yu : Costmap Node and Map Memory Node\
 Eric Song : Planner Node\
-Shida Zheng : Control Node# WATonomous ASD Admissions Assignment\
+Shida Zheng : Control Node
+
+
+# WATonomous ASD Admissions Assignment
 
 
 
