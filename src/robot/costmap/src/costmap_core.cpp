@@ -72,11 +72,17 @@ void CostmapCore::inflateObstacles() {
 
 }
 
-nav_msgs::msg::OccupancyGrid CostmapCore::publishCostmap() {
+nav_msgs::msg::OccupancyGrid CostmapCore::publishCostmap(double robot_x, double robot_y) {
     nav_msgs::msg::OccupancyGrid msg; 
     msg.info.resolution = resolution_;
     msg.info.width = width_;
     msg.info.height = height_;
+
+     // anchor grid (0,0) to the robot's actual world position, offset so the
+    // robot sits at the center of the grid instead of the corner
+    msg.info.origin.position.x = robot_x - (width_ * resolution_) / 2.0;
+    msg.info.origin.position.y = robot_y - (height_ * resolution_) / 2.0;
+    msg.info.origin.orientation.w = 1.0;
 
     // flatten the 2D grid into a 1D array row by row.
     for (int iii = 0; iii < height_; ++iii) {

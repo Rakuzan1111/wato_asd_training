@@ -17,7 +17,7 @@ class CostmapCore {
     void convertToGrid(double range, double angle, int &x_grid, int &y_grid);
     void markObstacle(int x_grid, int y_grid);
     void inflateObstacles();
-    nav_msgs::msg::OccupancyGrid publishCostmap();
+    nav_msgs::msg::OccupancyGrid publishCostmap(double robot_x, double robot_y);
 
   private:
     rclcpp::Logger logger_;

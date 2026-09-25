@@ -7,12 +7,21 @@ CostmapNode::CostmapNode() : Node("costmap"), costmap_(robot::CostmapCore(this->
   // Initialize the constructs and their parameters
   occupancy_pub_ = this->create_publisher<nav_msgs::msg::OccupancyGrid>("/costmap", 10);
   lidar_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>("/lidar", 10, std::bind(&CostmapNode::laserCallback, this, std::placeholders::_1));
+  odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>("/odom/filtered", 10, std::bind(&CostmapNode::odomCallback, this, std::placeholders::_1));
 
 }
+
+void CostmapNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg) {
+    robot_x_ = msg->pose.pose.position.x;
+    robot_y_ = msg->pose.pose.position.y;
+}
+
 
 void CostmapNode::laserCallback(const sensor_msgs::msg::LaserScan::SharedPtr scan) {
     // Step 1: Initialize costmap
     costmap_.initializeCostmap();
+
+    
 
     // Step 2: Convert LaserScan to grid and mark obstacles
      for (size_t i = 0; i < scan->ranges.size(); ++i) {
@@ -30,7 +39,7 @@ void CostmapNode::laserCallback(const sensor_msgs::msg::LaserScan::SharedPtr sca
     costmap_.inflateObstacles();
 
     // Step 4: Publish costmap
-    nav_msgs::msg::OccupancyGrid msg {costmap_.publishCostmap()};
+    nav_msgs::msg::OccupancyGrid msg {costmap_.publishCostmap(robot_x_, robot_y_)};
     msg.header.stamp = this->get_clock()->now();
     msg.header.frame_id = "map";
     occupancy_pub_->publish(msg);
