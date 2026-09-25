@@ -1,4 +1,9 @@
-# WATonomous ASD Admissions Assignment
+
+## Member Contribution
+
+Runzhen Yu : Costmap Node and Map Memory Node
+Eric Song : Planner Node
+Shida Zheng : Control Node# WATonomous ASD Admissions Assignment
 
 ## Prerequisite Installation
 These steps are to setup the monorepo to work on your own PC. We utilize docker to enable ease of reproducibility and deployability.
@@ -10,3 +15,5 @@ These steps are to setup the monorepo to work on your own PC. We utilize docker 
 3. You're all set! You can begin the assignment by visiting the WATonomous Wiki.
 
 Link to Onboarding Assignment: https://wiki.watonomous.ca/
+
+
