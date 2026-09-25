@@ -5,7 +5,6 @@
 
 #include "nav_msgs/msg/occupancy_grid.hpp"
 
-
 namespace robot
 {
 
@@ -30,6 +29,18 @@ class MapMemoryCore {
                       
     bool costmap_updated_ = false;
     nav_msgs::msg::OccupancyGrid current_map_;
+
+    // fixed size/resolution/origin for global_map_, decided once so every merge
+    // lines up with the same real-world frame no matter where the robot is
+    static constexpr int global_width_ {600};
+    static constexpr int global_height_ {600};
+    static constexpr double global_resolution_ {0.1};
+    static constexpr double global_origin_x_ {-30.0};
+    static constexpr double global_origin_y_ {-30.0};
+
+    // converts a cell index inside current_map_ into global_map_'s matching cell index,
+    // using each map's own origin/resolution so they line up in real-world space
+    bool worldIndexFor(size_t current_index, int &global_index) const;
     
 };
 

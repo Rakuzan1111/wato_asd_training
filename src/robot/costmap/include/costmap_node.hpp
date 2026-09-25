@@ -23,6 +23,7 @@ class CostmapNode : public rclcpp::Node {
     void odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg);
     double robot_x_ {0.0};
     double robot_y_ {0.0};
+    double robot_yaw_ {0.0};
 };
 
 #endif

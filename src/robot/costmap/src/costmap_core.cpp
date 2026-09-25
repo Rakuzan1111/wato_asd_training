@@ -6,9 +6,9 @@ namespace robot
 
 CostmapCore::CostmapCore(const rclcpp::Logger& logger) : logger_(logger) {}
 
-// resets the grid to all 0 before each new scan
+// resets the grid to all -1 before each new scan
 void CostmapCore::initializeCostmap() {
-    grid_.assign(height_, std::vector<int>(width_, 0));
+    grid_.assign(height_, std::vector<int>(width_, -1));
 }
 
 void CostmapCore::convertToGrid(double range, double angle, int &x_grid, int &y_grid) {
@@ -17,8 +17,8 @@ void CostmapCore::convertToGrid(double range, double angle, int &x_grid, int &y_
     double y = range * std::sin(angle);
 
      // convert meters into grid cells by dividing by cell size (resolution_).
-    x_grid = static_cast<int> (x / resolution_);
-    y_grid = static_cast<int> (y / resolution_);
+    x_grid = static_cast<int>(std::floor(x / resolution_)) + width_ / 2;
+    y_grid = static_cast<int>(std::floor(y / resolution_)) + height_ / 2;
 }
 
 void CostmapCore::markObstacle(int x_grid, int y_grid) {
@@ -68,7 +68,6 @@ void CostmapCore::inflateObstacles() {
         }
 
     }
-
 
 }
 

@@ -26,7 +26,7 @@ void MapMemoryNode::timerCallback() {
    // get the merged map, timestamp it, and publish it on /map for the planner node.
   nav_msgs::msg::OccupancyGrid msg {map_memory_.mergeCostmap()};
     msg.header.stamp = this->get_clock()->now();
-    msg.header.frame_id = "map";
+    msg.header.frame_id = "sim_world";
     global_map_pub_->publish(msg);
 }
 
