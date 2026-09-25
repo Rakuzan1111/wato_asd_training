@@ -39,11 +39,7 @@ void CostmapNode::laserCallback(const sensor_msgs::msg::LaserScan::SharedPtr sca
             // Calculate grid coordinates
             int x_grid, y_grid;
 
-            /* Add the robot's heading to the beam angle. The lidar reports angles
-               relative to the robot's nose, but our grid is aligned to the world
-               (the published origin has no rotation). Without this, every obstacle
-               rotates around the robot as it turns, which smears the remembered
-               map into arcs instead of building up stable walls. */
+          
             costmap_.convertToGrid(range, angle + robot_yaw_, x_grid, y_grid);
             costmap_.markObstacle(x_grid, y_grid);
         }

@@ -14,6 +14,7 @@
 namespace robot
 {
 
+// represents a cell in the occupancy grid by its x and y coordinates
 struct CellIndex 
 {
     int x;
@@ -31,6 +32,7 @@ struct CellIndex
 
 };
 
+// hash function for CellIndex to be used in unordered_map and unordered_set
 struct CellIndexHash
 {
     std::size_t operator()(const CellIndex& cell) const
@@ -39,6 +41,7 @@ struct CellIndexHash
     }
 };
 
+// represents a node in the A* algorithm, containing the cell index and its f_score
 struct AStarNode
 {
     CellIndex index;
@@ -47,6 +50,7 @@ struct AStarNode
     AStarNode(CellIndex idx, double f) : index(idx), f_score(f) {}
 };
 
+// comparison function for the priority queue to order nodes by f_score
 struct CompareF
 {
     bool operator()(const AStarNode& a, const AStarNode& b) const
@@ -55,12 +59,14 @@ struct CompareF
     }
 };
 
+// PlannerCore class encapsulates the A* pathfinding algorithm and related utilities
 class PlannerCore {
     public:
         explicit PlannerCore(const rclcpp::Logger& logger);
 
         double heuristic(const CellIndex& current, const CellIndex& goal) const;
 
+        // returns a vector of neighboring cells that are free (not occupied) in the map
         std::vector <CellIndex> getNeighbors 
         (
             const CellIndex& current, 
@@ -69,6 +75,7 @@ class PlannerCore {
             int height
         ) const;
     
+        // checks if a cell is free (not occupied) and within the bounds of the map
         bool isCellFree
         (
             const CellIndex& cell,
@@ -76,6 +83,8 @@ class PlannerCore {
             int width,
             int height
         ) const;
+
+        // implements the A* algorithm to find the best path from start to goal
         std::vector<CellIndex> aStar
         (
             const std::vector<int8_t>& mapData,

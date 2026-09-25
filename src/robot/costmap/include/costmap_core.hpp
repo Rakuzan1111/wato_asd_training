@@ -31,7 +31,7 @@ namespace robot
     int width_{300};
     double resolution_{0.1};
 
-    double inflation_radius_{2.0}; // obstacles inflated by 1.0m
+    double inflation_radius_{1.7}; // obstacles inflated by 1.7m
   };
 
 }

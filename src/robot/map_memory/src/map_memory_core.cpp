@@ -7,8 +7,8 @@ namespace robot
 MapMemoryCore::MapMemoryCore(const rclcpp::Logger& logger) 
   : logger_(logger) {}
 
-/* tells the caller whether storingCostmap() has run at least once, so
-   mergeCostmap() isn't called on an empty, uninitialized current_map_ */
+// tells the caller whether storingCostmap() has run at least once, so
+// mergeCostmap() isn't called on an empty, uninitialized current_map_
 bool MapMemoryCore::hasReceivedCostmap() {
   return costmap_updated_;
 }
@@ -71,16 +71,29 @@ nav_msgs::msg::OccupancyGrid MapMemoryCore::mergeCostmap() {
     global_map_.data.assign(global_width_ * global_height_, -1);
   }
 
-  /* -1 means "unknown" (e.g. out of the laser's current view). Only
-     overwrite global_map_ where the current scan has real data, translating
-     each cell through world coordinates since current_map_'s origin moves
-     with the robot while global_map_'s origin stays fixed */
-  for (size_t iii = 0; iii < current_map_.data.size(); ++iii) {
-    if (current_map_.data[iii] != -1) {
-      int global_index {};
-      if (worldIndexFor(iii, global_index)) {
-        global_map_.data[global_index] = current_map_.data[iii];
-      }
+  // Translate each cell through world coordinates, since current_map_'s origin
+  // moves with the robot while global_map_'s origin stays fixed.
+  size_t num_cells {current_map_.data.size()};
+  for (size_t iii = 0; iii < num_cells; ++iii) {
+    int8_t incoming {current_map_.data[iii]};
+
+    // -1 means "unknown" (e.g. out of the laser's current view). The scan
+    // told us nothing about this cell, so leave whatever we remembered
+    // untouched.
+    if (incoming == -1) {
+      continue;
+    }
+
+    int global_index {};
+    if (!worldIndexFor(iii, global_index)) {
+      continue;
+    }
+
+    int8_t &remembered {global_map_.data[global_index]};
+
+    // keep the highest cost ever seen for this cell instead of blindly overwriting it. 
+    if (remembered == -1 || incoming > remembered) {
+      remembered = incoming;
     }
   }
 
@@ -88,4 +101,3 @@ nav_msgs::msg::OccupancyGrid MapMemoryCore::mergeCostmap() {
 }
 
 }
-

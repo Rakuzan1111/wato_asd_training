@@ -23,8 +23,8 @@ class MapMemoryCore {
     double distance_threshold_ {1.5};          // distance (m) before resetting position check
     nav_msgs::msg::OccupancyGrid global_map_; 
 
-    /* true until first merge so that mergeCostmap() copies the whole map instead of 
-    merging into it the first run */
+    // true until first merge so that mergeCostmap() copies the whole map instead of 
+    // merging into it the first run 
     bool first_run_ = true; 
                       
     bool costmap_updated_ = false;

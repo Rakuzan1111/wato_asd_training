@@ -21,7 +21,7 @@ PlannerNode::PlannerNode()
  
     // timer (check if robot reached goal / needs replanning)
     timer_ = this->create_wall_timer(
-        std::chrono::milliseconds(500), std::bind(&PlannerNode::timerCallback, this));
+        std::chrono::milliseconds(1000), std::bind(&PlannerNode::timerCallback, this));
 }
 
 // confirming the map is received and makes an initial replan if it changes
@@ -30,12 +30,14 @@ void PlannerNode::mapCallback(const nav_msgs::msg::OccupancyGrid::SharedPtr msg)
 
     current_map_ = *msg;
     map_received_ = true;
-
+    
+    /*
     // replan whenever the global map changes
     if (state_ == State::WAITING_FOR_ROBOT_TO_REACH_GOAL)
     {
         planPath();
     }
+    */
 }
 
 // confirming the robot's goal is received

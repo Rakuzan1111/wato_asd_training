@@ -76,21 +76,13 @@ bool PlannerCore::isCellFree
     int mapIndex {cell.y * width + cell.x};
     int cost {static_cast<int>(mapData[mapIndex])};
 
-    /* -1 means "unknown" - treat it as driveable so the robot is allowed to
-       plan into areas it hasn't mapped yet (otherwise it can never leave the
-       small patch it has already seen). */
+    // check if the cell is free (cost < 0) or occupied (cost >= 30)
     if (cost < 0)
     {
         return true;
     }
 
-    /* Block anything at or above this cost, not just an exact 100. The costmap
-       inflates obstacles outward with costs from 99 down to 0, so checking only
-       "== 100" made every inflated cell look free and let the path cut straight
-       through the safety buffer and clip corners. 50 corresponds to roughly
-       half the inflation radius; raise it to hug walls more, lower it to keep
-       further away. */
-    constexpr int blocked_cost {50};
+    constexpr int blocked_cost {30};
     if (cost >= blocked_cost)
     {
         return false;

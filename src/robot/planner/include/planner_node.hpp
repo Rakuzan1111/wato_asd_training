@@ -43,6 +43,10 @@ private:
     nav_msgs::msg::OccupancyGrid current_map_;
     geometry_msgs::msg::PointStamped goal_;
     geometry_msgs::msg::Pose robot_pose_;
+
+    // path data
+    nav_msgs::msg::Path current_path_;
+    bool has_path_ {false};
     
     // timer
     rclcpp::TimerBase::SharedPtr timer_;
@@ -56,11 +60,13 @@ private:
     bool goal_received_ {false};
     bool odom_received_ {false};
 
-
-
     bool goalReached() const;
     void planPath();
+
+    // checks if the current path is still valid (no obstacles in the way)
+    bool pathStillValid() const;
     
+    // converts the world position to a grid position (meters to cells)
     robot::CellIndex worldToGrid(double worldX, double worldY) const;
     geometry_msgs::msg::PoseStamped gridToWorld(const robot::CellIndex& cell) const;
 };

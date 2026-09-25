@@ -1,5 +1,6 @@
 #include "control_core.hpp"
 #include <cmath>
+#include <cstddef>
 
 namespace
 {
@@ -22,7 +23,7 @@ namespace robot
 {
 
   ControlCore::ControlCore(const rclcpp::Logger &logger)
-      : lookahead_distance(1.0), goal_tolerance(0.5), linear_speed(2.0), logger_(logger) {}
+      : lookahead_distance(1.0), goal_tolerance(0.5), linear_speed(1), logger_(logger) {}
 
   std::optional<geometry_msgs::msg::Twist> ControlCore::getTwist()
   {
@@ -82,10 +83,11 @@ namespace robot
     {
       return std::nullopt;
     }
-    for (const auto &pose_stamped : current_path_->poses)
+    for (std::size_t i = current_path_->poses.size(); i --> 0;)
     {
+      const auto &pose_stamped = current_path_->poses[i];
       auto target_pos = pose_stamped.pose.position;
-      if (distance(pos, target_pos) > lookahead_distance)
+      if (distance(pos, target_pos) < lookahead_distance)
       {
         return target_pos;
       }
