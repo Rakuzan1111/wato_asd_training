@@ -1,9 +1,12 @@
 
 ## Member Contribution
 
-Runzhen Yu : Costmap Node and Map Memory Node
-Eric Song : Planner Node
-Shida Zheng : Control Node# WATonomous ASD Admissions Assignment
+Runzhen Yu : Costmap Node and Map Memory Node\
+Eric Song : Planner Node\
+Shida Zheng : Control Node# WATonomous ASD Admissions Assignment\
+
+
+
 
 ## Prerequisite Installation
 These steps are to setup the monorepo to work on your own PC. We utilize docker to enable ease of reproducibility and deployability.
